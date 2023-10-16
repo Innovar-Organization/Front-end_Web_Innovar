@@ -5,9 +5,9 @@ import MainComp from './components/MainComp.vue'
 
 <template>
   <header><HeaderComp /></header>
-
-  <main><MainComp /></main>
+  <main>
+    <MainComp />
+  </main>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
