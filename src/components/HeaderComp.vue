@@ -7,7 +7,7 @@
 <style scoped>
 .header {
   background-color: cyan;
-  height: 200px;
+  height: 160px;
   width: 100%;
   display: flex;
   justify-content: center;
