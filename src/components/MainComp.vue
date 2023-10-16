@@ -2,6 +2,6 @@
 </script>
 
 <template>
-Main
+fgd
 </template>
 <style></style>

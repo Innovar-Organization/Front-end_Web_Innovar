@@ -1,25 +1,33 @@
-<script>
-</script>
-
 <template>
-    <div class="header">
-      <h2 class="header-text">Este é o Header</h2>
-    </div>
-  </template>
-  
-  <style scoped>
-  .header {
-    background-color: cyan;
-    height: 200px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  <div class="header">
+    <h2 class="header-text">Este é o Header</h2>
+  </div>
+</template>
+
+<style scoped>
+.header {
+  background-color: cyan;
+  height: 200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-  
-  .header-text {
-    color: white;
+.header-text {
+  color: white;
+  font-size: 24px; 
+}
+
+@media (max-width: 768px) {
+   .header-text {
+    font-size: 18px;
   }
-  </style>
-  
+}
+
+@media (max-width: 480px) {
+  .header-text {
+    font-size: 16px;
+  }
+}
+</style>
