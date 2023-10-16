@@ -2,21 +2,41 @@
   <div class="main">
     <h2 class="main-title">Main</h2>
     <div class="content">
-      <div class="left-column">
+      <div class="coluna-1">
         <h3>Horários Bloqueados</h3>
-        <div class="time-list">
-          <div class="time" v-for="(blockedTime, index) in blockedTimes" :key="index">
-            {{ blockedTime }}
+        <div class="content-list">
+          <div class="list" v-for="(horarioBloq, index) in horarioBloqs" :key="index">
+            {{ horarioBloq }}
           </div>
         </div>
-        <input v-model="newBlockedTime" @keyup.enter="addBlockedTime" placeholder="Adicionar horário">
+        <input
+          v-model="newhorarioBloq"
+          @keyup.enter="addhorarioBloq"
+          placeholder="Adicionar horário"
+        />
       </div>
-      <div class="middle-column">
-      
+      <div class="coluna-2">
+        <h3>Procedimentos</h3>
+        <div class="content-list">
+          <div class="list" v-for="(procedimento, index) in procedimentos" :key="index">
+            {{ procedimento }}
+          </div>
+        </div>
+        <input
+          v-model="newprocedimento"
+          @keyup.enter="addprocedimento"
+          placeholder="Adicionar procedimento"
+        />
       </div>
-    
-      <div class="right-column">
-    
+
+      <div class="coluna-3">
+        <h3>Pacotes</h3>
+        <div class="content-list">
+          <div class="list" v-for="(pacote, index) in pacotes" :key="index">
+            {{ pacote }}
+          </div>
+        </div>
+        <input v-model="newpacote" @keyup.enter="addpacote" placeholder="Adicionar pacote" />
       </div>
     </div>
   </div>
@@ -26,19 +46,35 @@
 export default {
   data() {
     return {
-      blockedTimes: [],
-      newBlockedTime: "",
-    };
+      horarioBloqs: [],
+      procedimentos: [],
+      pacotes: [],
+      newpacote: '',
+      newhorarioBloq: '',
+      newprocedimento: ''
+    }
   },
   methods: {
-    addBlockedTime() {
-      if (this.newBlockedTime.trim() !== "") {
-        this.blockedTimes.push(this.newBlockedTime);
-        this.newBlockedTime = "";
+    addhorarioBloq() {
+      if (this.newhorarioBloq.trim() !== '') {
+        this.horarioBloqs.push(this.newhorarioBloq)
+        this.newhorarioBloq = ''
       }
     },
-  },
-};
+    addprocedimento() {
+      if (this.newprocedimento.trim() !== '') {
+        this.procedimentos.push(this.newprocedimento)
+        this.newprocedimento = ''
+      }
+    },
+    addpacote() {
+      if (this.newpacote.trim() !== '') {
+        this.pacotes.push(this.newpacote)
+        this.newpacote = ''
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -62,34 +98,34 @@ export default {
   align-items: flex-start;
 }
 
-.left-column {
-  width: 30%; 
+.coluna-1 {
+  width: 30%;
   background-color: white;
   border: 1px solid black;
   padding: 10px;
 }
 
-.middle-column {
-  width: 30%; 
+.coluna-2 {
+  width: 30%;
   background-color: white;
   border: 1px solid black;
   padding: 10px;
 }
 
-.right-column {
-  width: 30%; 
+.coluna-3 {
+  width: 30%;
   background-color: white;
   border: 1px solid black;
   padding: 10px;
 }
 
-.time-list {
+.content-list {
   max-height: 300px;
   overflow-y: auto;
   border: 1px solid black;
 }
 
-.time {
+.list {
   padding: 5px;
 }
 </style>
