@@ -6,43 +6,46 @@
         <h3>Horários Bloqueados</h3>
         <div class="content-list">
           <div class="list" v-for="(horarioBloq, index) in horarioBloqs" :key="index">
-            {{ horarioBloq }}
-            <button @click="excluirHorario(index)">Excluir</button>
+            <span class="item">{{ horarioBloq }}</span>
+            <button @click="excluirHorario(index)" class="delete-button">Excluir</button>
           </div>
         </div>
-        <button @click="limparHorarios" class="limpar-button">Limpar</button>
+        
         <input
           v-model="newhorarioBloq"
           @keyup.enter="addhorarioBloq"
           placeholder="Adicionar Horário"
         />
+        <button @click="limparHorarios" class="clear-button">Limpar</button>
       </div>
       <div class="coluna">
         <h3>Procedimentos</h3>
         <div class="content-list">
           <div class="list" v-for="(procedimento, index) in procedimentos" :key="index">
-            {{ procedimento }}
-            <button @click="excluirProcedimento(index)">Excluir</button>
+            <span class="item">{{ procedimento }}</span>
+            <button @click="excluirProcedimento(index)" class="delete-button">Excluir</button>
           </div>
         </div>
-        <button @click="limparProcedimentos" class="limpar-button">Limpar</button>
+        
         <input
           v-model="newprocedimento"
           @keyup.enter="addprocedimento"
           placeholder="Adicionar Procedimento"
         />
+        <button @click="limparProcedimentos" class="clear-button">Limpar</button>
       </div>
 
       <div class="coluna">
         <h3>Pacotes</h3>
         <div class="content-list">
           <div class="list" v-for="(pacote, index) in pacotes" :key="index">
-            {{ pacote }}
-            <button @click="excluirPacote(index)">Excluir</button>
+            <span class="item">{{ pacote }}</span>
+            <button @click="excluirPacote(index)" class="delete-button">Excluir</button>
           </div>
         </div>
-        <button @click="limparPacotes" class="limpar-button">Limpar</button>
+        
         <input v-model="newpacote" @keyup.enter="addpacote" placeholder="Adicionar Pacote" />
+        <button @click="limparPacotes" class="clear-button">Limpar</button>
       </div>
     </div>
   </div>
@@ -104,16 +107,16 @@ export default {
 <style scoped>
 .main {
   margin: 20px;
-  background-color: cyan;
+  background-color: #f0f0f0;
   padding: 20px;
   text-align: center;
-  min-height: 500px;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .main-title {
-  color: white;
+  color: #333;
   font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .content {
@@ -124,38 +127,63 @@ export default {
 
 .coluna {
   width: 30%;
-  background-color: white;
-  border: 1px solid black;
-  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   border-radius: 10px;
-  position: relative;
+  margin: 10px;
+  transition: box-shadow 0.3s;
 }
 
-.coluna .content-list {
-  max-height: 300px;
-  overflow-y: auto;
-  border: 1px solid black;
-  margin-bottom: 10px;
-  border-radius: 5px;
+.coluna:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .list {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.item {
+  color: #333;
+  font-size: 16px;
+}
+
+.delete-button {
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #ff4739;
+}
+
+.clear-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.clear-button:hover {
+  background-color: #222;
 }
 
 input {
-  text-align: center;
-}
-
-.limpar-button {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  border: black;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  cursor: pointer;
 }
 </style>
