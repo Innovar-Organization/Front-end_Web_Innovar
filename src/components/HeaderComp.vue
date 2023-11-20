@@ -1,6 +1,7 @@
 <template>
   <div class="header">
-    <h2 class="header-text">Este é o Header</h2>
+    <h2 class="header-text">Espaço Innovar</h2>
+      <!-- <img class="logo" src="media/logoinnovar.png" alt="Innovar"> -->
     <div class="header-buttons">
       <button class="header-button" @click="goToProcedimentos">Procedimentos</button>
       <button class="header-button" @click="goToHorariosBloqueados">Horários Bloqueados</button>
@@ -76,13 +77,13 @@
 export default {
   methods: {
     goToProcedimentos() {
-      // Adicione aqui a lógica para navegar para a tela de procedimentos
+     
     },
     goToHorariosBloqueados() {
-      // Adicione aqui a lógica para navegar para a tela de horários bloqueados
+     
     },
     goToPacotes() {
-      // Adicione aqui a lógica para navegar para a tela de pacotes
+  
     },
   },
 };

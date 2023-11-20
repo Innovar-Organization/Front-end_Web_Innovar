@@ -6,7 +6,7 @@
         <h3>Horários Bloqueados</h3>
         <div class="content-list">
           <div class="list" v-for="(horarioBloq, index) in horarioBloqs" :key="index">
-            <span class="item">{{ horarioBloq }}</span>
+            <span class="item">{{ formatarData(horarioBloq) }}</span>
             <button @click="excluirHorario(index)" class="delete-button">Excluir</button>
           </div>
         </div>
@@ -14,10 +14,11 @@
         <input
           v-model="newhorarioBloq"
           @keyup.enter="addhorarioBloq"
-          placeholder="Adicionar Horário"
+          type="date"
         />
         <button @click="limparHorarios" class="clear-button">Limpar</button>
       </div>
+      
       <div class="coluna">
         <h3>Procedimentos</h3>
         <div class="content-list">
@@ -99,10 +100,15 @@ export default {
     },
     excluirPacote(index) {
       this.pacotes.splice(index, 1);
-    }
+    },
+    formatarData(data) {
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+      return new Date(data).toLocaleDateString(undefined, options);
+    },
   }
 }
 </script>
+
 
 <style scoped>
 .main {
@@ -153,7 +159,7 @@ export default {
 }
 
 .delete-button {
-  background-color: #ff6347;
+  background-color: #a70b00;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -163,7 +169,7 @@ export default {
 }
 
 .delete-button:hover {
-  background-color: #ff4739;
+  background-color: #a70b00;
 }
 
 .clear-button {
@@ -172,6 +178,7 @@ export default {
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
+  margin-top: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -181,7 +188,7 @@ export default {
 }
 
 input {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
