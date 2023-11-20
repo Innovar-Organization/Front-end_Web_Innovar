@@ -6,19 +6,30 @@
         <h3>Horários Bloqueados</h3>
         <div class="content-list">
           <div class="list" v-for="(horarioBloq, index) in horarioBloqs" :key="index">
-            <span class="item">{{ formatarData(horarioBloq) }}</span>
+            <span class="item">{{ formatarDataHora(horarioBloq.inicio, horarioBloq.fim) }}</span>
             <button @click="excluirHorario(index)" class="delete-button">Excluir</button>
           </div>
         </div>
-        
-        <input
-          v-model="newhorarioBloq"
-          @keyup.enter="addhorarioBloq"
-          type="date"
-        />
-        <button @click="limparHorarios" class="clear-button">Limpar</button>
+
+        <div>
+          <label for="data">Data:</label>
+          <input v-model="newDataBloq" type="date" id="data" />
+        </div>
+        <div>
+          <label for="horaInicio">Hora Início:</label>
+          <input v-model="newHoraInicio" type="time" id="horaInicio" />
+        </div>
+        <div>
+          <label for="horaFim">Hora Fim:</label>
+          <input v-model="newHoraFim" type="time" id="horaFim" />
+        </div>
+
+        <div class="button-container">
+          <button @click="addhorarioBloq" class="add-button" :disabled="!isValidInput">Adicionar</button>
+          <button @click="limparHorarios" class="clear-button">Limpar</button>
+        </div>
       </div>
-      
+
       <div class="coluna">
         <h3>Procedimentos</h3>
         <div class="content-list">
@@ -27,7 +38,7 @@
             <button @click="excluirProcedimento(index)" class="delete-button">Excluir</button>
           </div>
         </div>
-        
+
         <input
           v-model="newprocedimento"
           @keyup.enter="addprocedimento"
@@ -44,7 +55,7 @@
             <button @click="excluirPacote(index)" class="delete-button">Excluir</button>
           </div>
         </div>
-        
+
         <input v-model="newpacote" @keyup.enter="addpacote" placeholder="Adicionar Pacote" />
         <button @click="limparPacotes" class="clear-button">Limpar</button>
       </div>
@@ -59,56 +70,79 @@ export default {
       horarioBloqs: [],
       procedimentos: [],
       pacotes: [],
+      newDataBloq: '',
+      newHoraInicio: '',
+      newHoraFim: '',
+      newprocedimento: '',
       newpacote: '',
-      newhorarioBloq: '',
-      newprocedimento: ''
-    }
+    };
+  },
+  computed: {
+    isValidInput() {
+      return this.newDataBloq.trim() !== '' && this.newHoraInicio.trim() !== '' && this.newHoraFim.trim() !== '';
+    },
   },
   methods: {
     addhorarioBloq() {
-      if (this.newhorarioBloq.trim() !== '') {
-        this.horarioBloqs.push(this.newhorarioBloq);
-        this.newhorarioBloq = '';
-      }
+  if (this.isValidInput) {
+    const inicio = new Date(`${this.newDataBloq}T${this.newHoraInicio}`);
+    const fim = new Date(`${this.newDataBloq}T${this.newHoraFim}`);
+
+    if (!isNaN(inicio) && !isNaN(fim) && inicio < fim) {
+      this.horarioBloqs.push({ inicio, fim });
+      this.newDataBloq = '';
+      this.newHoraInicio = '';
+      this.newHoraFim = '';
+    } else {
+      alert("Por favor, insira datas e horas válidas.");
+    }
+  } else {
+    alert("Por favor, preencha todos os campos.");
+  }
+},
+cluirHorario(index) {
+      this.horarioBloqs.splice(index, 1);
     },
+    limparHorarios() {
+    if (window.confirm('Tem certeza de que deseja limpar todos os horários bloqueados?')) {
+      this.horarioBloqs = [];
+    }
+  },
     addprocedimento() {
       if (this.newprocedimento.trim() !== '') {
         this.procedimentos.push(this.newprocedimento);
         this.newprocedimento = '';
       }
     },
+    excluirProcedimento(index) {
+      this.procedimentos.splice(index, 1);
+    },
+    limparProcedimentos() {
+      this.procedimentos = [];
+    },
+
     addpacote() {
       if (this.newpacote.trim() !== '') {
         this.pacotes.push(this.newpacote);
         this.newpacote = '';
       }
     },
-    limparHorarios() {
-      this.horarioBloqs = [];
-    },
-    excluirHorario(index) {
-      this.horarioBloqs.splice(index, 1);
-    },
-    limparProcedimentos() {
-      this.procedimentos = [];
-    },
-    excluirProcedimento(index) {
-      this.procedimentos.splice(index, 1);
+    excluirPacote(index) {
+      this.pacotes.splice(index, 1);
     },
     limparPacotes() {
       this.pacotes = [];
     },
-    excluirPacote(index) {
-      this.pacotes.splice(index, 1);
-    },
-    formatarData(data) {
-      const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-      return new Date(data).toLocaleDateString(undefined, options);
-    },
-  }
-}
-</script>
 
+    formatarDataHora(inicio, fim) {
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+      const formatoInicio = new Date(inicio).toLocaleDateString(undefined, options);
+      const formatoFim = new Date(fim).toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
+      return `${formatoInicio} às ${formatoFim}`;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .main {
@@ -169,7 +203,7 @@ export default {
 }
 
 .delete-button:hover {
-  background-color: #a70b00;
+  background-color: #ff1100;
 }
 
 .clear-button {
@@ -184,7 +218,27 @@ export default {
 }
 
 .clear-button:hover {
-  background-color: #222;
+  background-color: #858484;
+}
+
+.add-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.add-button:hover {
+  background-color: #525252;
+}
+
+.button-container {
+  margin-top: 10px;
 }
 
 input {
