@@ -14,7 +14,7 @@
 .header {
   background: linear-gradient(to bottom, #00b5b2, #68e2e0);
   height: 160px;
-  width: 100%;
+  width: 98%;
   display: flex;
   justify-content: space-between;
   align-items: center;

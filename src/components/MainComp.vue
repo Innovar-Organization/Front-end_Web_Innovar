@@ -34,30 +34,60 @@
         <h3>Procedimentos</h3>
         <div class="content-list">
           <div class="list" v-for="(procedimento, index) in procedimentos" :key="index">
-            <span class="item">{{ procedimento }}</span>
+            <span class="item">{{ procedimento.nome }}</span>
+            <span class="item">{{ procedimento.descricao }}</span>
+            <img :src="procedimento.imagem" alt="Imagem do Procedimento" />
             <button @click="excluirProcedimento(index)" class="delete-button">Excluir</button>
           </div>
         </div>
 
-        <input
-          v-model="newprocedimento"
-          @keyup.enter="addprocedimento"
-          placeholder="Adicionar Procedimento"
-        />
-        <button @click="limparProcedimentos" class="clear-button">Limpar</button>
+        <div>
+          <label for="procedimentoNome">Nome do Procedimento:</label>
+          <input v-model="newProcedimentoNome" type="text" id="procedimentoNome" />
+        </div>
+        <div>
+          <label for="procedimentoDescricao">Descrição do Procedimento:</label>
+          <input v-model="newProcedimentoDescricao" type="text" id="procedimentoDescricao" />
+        </div>
+        <div>
+          <label for="procedimentoImagem">Imagem do Procedimento:</label>
+          <input type="file" @change="handleProcedimentoImagemChange" />
+        </div>
+
+        <div class="button-container">
+          <button @click="addprocedimento" class="add-button" :disabled="!isValidProcedimentoInput">Adicionar</button>
+          <button @click="limparProcedimentos" class="clear-button">Limpar</button>
+        </div>
       </div>
 
       <div class="coluna">
         <h3>Pacotes</h3>
         <div class="content-list">
           <div class="list" v-for="(pacote, index) in pacotes" :key="index">
-            <span class="item">{{ pacote }}</span>
+            <span class="item">{{ pacote.nome }}</span>
+            <span class="item">{{ pacote.descricao }}</span>
+            <img :src="pacote.imagem" alt="Imagem do Pacote" />
             <button @click="excluirPacote(index)" class="delete-button">Excluir</button>
           </div>
         </div>
 
-        <input v-model="newpacote" @keyup.enter="addpacote" placeholder="Adicionar Pacote" />
-        <button @click="limparPacotes" class="clear-button">Limpar</button>
+        <div>
+          <label for="pacoteNome">Nome do Pacote:</label>
+          <input v-model="newPacoteNome" type="text" id="pacoteNome" />
+        </div>
+        <div>
+          <label for="pacoteDescricao">Descrição do Pacote:</label>
+          <input v-model="newPacoteDescricao" type="text" id="pacoteDescricao" />
+        </div>
+        <div>
+          <label for="pacoteImagem">Imagem do Pacote:</label>
+          <input type="file" @change="handlePacoteImagemChange" />
+        </div>
+
+        <div class="button-container">
+          <button @click="addpacote" class="add-button" :disabled="!isValidPacoteInput">Adicionar</button>
+          <button @click="limparPacotes" class="clear-button">Limpar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -73,65 +103,116 @@ export default {
       newDataBloq: '',
       newHoraInicio: '',
       newHoraFim: '',
-      newprocedimento: '',
-      newpacote: '',
+      newProcedimentoNome: '',
+      newProcedimentoDescricao: '',
+      newProcedimentoImagem: null,
+      newPacoteNome: '',
+      newPacoteDescricao: '',
+      newPacoteImagem: null,
     };
   },
   computed: {
     isValidInput() {
       return this.newDataBloq.trim() !== '' && this.newHoraInicio.trim() !== '' && this.newHoraFim.trim() !== '';
     },
+    isValidProcedimentoInput() {
+      return (
+        this.newProcedimentoNome.trim() !== '' &&
+        this.newProcedimentoDescricao.trim() !== '' &&
+        this.newProcedimentoImagem !== null
+      );
+    },
+    isValidPacoteInput() {
+      return (
+        this.newPacoteNome.trim() !== '' &&
+        this.newPacoteDescricao.trim() !== '' &&
+        this.newPacoteImagem !== null
+      );
+    },
   },
   methods: {
     addhorarioBloq() {
-  if (this.isValidInput) {
-    const inicio = new Date(`${this.newDataBloq}T${this.newHoraInicio}`);
-    const fim = new Date(`${this.newDataBloq}T${this.newHoraFim}`);
+      if (this.isValidInput) {
+        const inicio = new Date(`${this.newDataBloq}T${this.newHoraInicio}`);
+        const fim = new Date(`${this.newDataBloq}T${this.newHoraFim}`);
 
-    if (!isNaN(inicio) && !isNaN(fim) && inicio < fim) {
-      this.horarioBloqs.push({ inicio, fim });
-      this.newDataBloq = '';
-      this.newHoraInicio = '';
-      this.newHoraFim = '';
-    } else {
-      alert("Por favor, insira datas e horas válidas.");
-    }
-  } else {
-    alert("Por favor, preencha todos os campos.");
-  }
-},
-cluirHorario(index) {
+        if (!isNaN(inicio) && !isNaN(fim) && inicio < fim) {
+          this.horarioBloqs.push({ inicio, fim });
+          this.newDataBloq = '';
+          this.newHoraInicio = '';
+          this.newHoraFim = '';
+        } else {
+          alert("Por favor, insira datas e horas válidas.");
+        }
+      } else {
+        alert("Por favor, preencha todos os campos.");
+      }
+    },
+    excluirHorario(index) {
       this.horarioBloqs.splice(index, 1);
     },
     limparHorarios() {
-    if (window.confirm('Tem certeza de que deseja limpar todos os horários bloqueados?')) {
-      this.horarioBloqs = [];
-    }
-  },
+      if (window.confirm('Tem certeza de que deseja limpar todos os horários bloqueados?')) {
+        this.horarioBloqs = [];
+      }
+    },
+
     addprocedimento() {
-      if (this.newprocedimento.trim() !== '') {
-        this.procedimentos.push(this.newprocedimento);
-        this.newprocedimento = '';
+      if (this.isValidProcedimentoInput) {
+        const procedimento = {
+          nome: this.newProcedimentoNome,
+          descricao: this.newProcedimentoDescricao,
+          imagem: this.newProcedimentoImagem,
+        };
+
+        this.procedimentos.push(procedimento);
+        this.newProcedimentoNome = '';
+        this.newProcedimentoDescricao = '';
+        this.newProcedimentoImagem = null;
+      } else {
+        alert("Por favor, preencha todos os campos do procedimento.");
       }
     },
     excluirProcedimento(index) {
       this.procedimentos.splice(index, 1);
     },
     limparProcedimentos() {
-      this.procedimentos = [];
+      if (window.confirm('Tem certeza de que deseja limpar todos os procedimentos?')) {
+        this.procedimentos = [];
+      }
+    },
+    handleProcedimentoImagemChange(event) {
+      const file = event.target.files[0];
+      this.newProcedimentoImagem = URL.createObjectURL(file);
     },
 
     addpacote() {
-      if (this.newpacote.trim() !== '') {
-        this.pacotes.push(this.newpacote);
-        this.newpacote = '';
+      if (this.isValidPacoteInput) {
+        const pacote = {
+          nome: this.newPacoteNome,
+          descricao: this.newPacoteDescricao,
+          imagem: this.newPacoteImagem,
+        };
+
+        this.pacotes.push(pacote);
+        this.newPacoteNome = '';
+        this.newPacoteDescricao = '';
+        this.newPacoteImagem = null;
+      } else {
+        alert("Por favor, preencha todos os campos do pacote.");
       }
     },
     excluirPacote(index) {
       this.pacotes.splice(index, 1);
     },
     limparPacotes() {
-      this.pacotes = [];
+      if (window.confirm('Tem certeza de que deseja limpar todos os pacotes?')) {
+        this.pacotes = [];
+      }
+    },
+    handlePacoteImagemChange(event) {
+      const file = event.target.files[0];
+      this.newPacoteImagem = URL.createObjectURL(file);
     },
 
     formatarDataHora(inicio, fim) {
@@ -143,6 +224,8 @@ cluirHorario(index) {
   },
 };
 </script>
+
+
 
 <style scoped>
 .main {
@@ -247,4 +330,21 @@ input {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+.upload-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.upload-button:hover {
+  background-color: #525252;
+}
+
 </style>
