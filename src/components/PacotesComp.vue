@@ -24,7 +24,7 @@
     </div>
 
     <div class="button-container">
-      <button @click="addpacote" class="add-button" :disabled="!isValidPacoteInput">
+      <button @click="addPacote" class="add-button" :disabled="!isValidPacoteInput">
         Adicionar
       </button>
       <button @click="limparPacotes" class="clear-button">Limpar</button>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   props: ['pacotes'],
   data() {
@@ -40,8 +42,8 @@ export default {
       newPacoteNome: '',
       newPacoteDescricao: '',
       newPacoteImagem: null,
-      newPacoteImagemNome: ''
-    }
+      newPacoteImagemNome: '',
+    };
   },
   computed: {
     isValidPacoteInput() {
@@ -49,71 +51,60 @@ export default {
         this.newPacoteNome.trim() !== '' &&
         this.newPacoteDescricao.trim() !== '' &&
         this.newPacoteImagem !== null
-      )
-    }
+      );
+    },
   },
   methods: {
-    addpacote() {
+    async addPacote() {
       if (this.isValidPacoteInput) {
-        const pacote = {
-          nome: this.newPacoteNome,
-          descricao: this.newPacoteDescricao,
-          imagem: this.newPacoteImagem,
-          imagemNome: this.newPacoteImagemNome
-        }
+        const formData = new FormData();
+        formData.append('nome', this.newPacoteNome);
+        formData.append('descricao', this.newPacoteDescricao);
+        formData.append('imagem', this.newPacoteImagem);
 
-        this.$emit('adicionarPacote', pacote) // Emitindo evento para o componente pai
-        this.limparCampos()
+        try {
+          const response = await axios.post('http://localhost:19003/api/pacotes/', formData);
+          this.$emit('adicionarPacote', response.data);
+          this.limparCampos();
+        } catch (error) {
+          console.error('Erro ao adicionar pacote:', error);
+        }
       } else {
-        alert('Por favor, preencha todos os campos do pacote.')
+        alert('Por favor, preencha todos os campos do pacote.');
       }
     },
     excluirPacote(index) {
-      this.$emit('excluirPacote', index) // Emitindo evento para o componente pai
+      this.$emit('excluirPacote', index);
     },
     limparPacotes() {
       if (window.confirm('Tem certeza de que deseja limpar todos os pacotes?')) {
-        this.$emit('limparPacotes') // Emitindo evento para o componente pai
+        this.$emit('limparPacotes');
       }
     },
     handlePacoteImagemChange(event) {
-      const file = event.target.files[0]
-      this.newPacoteImagem = URL.createObjectURL(file)
-      this.newPacoteImagemNome = file.name
+      const file = event.target.files[0];
+      this.newPacoteImagem = file;
+      this.newPacoteImagemNome = file.name;
     },
     limparCampos() {
-      this.newPacoteNome = ''
-      this.newPacoteDescricao = ''
-      this.newPacoteImagem = null
-      this.newPacoteImagemNome = ''
-    }
-  }
-}
+      this.newPacoteNome = '';
+      this.newPacoteDescricao = '';
+      this.newPacoteImagem = null;
+      this.newPacoteImagemNome = '';
+    },
+  },
+};
 </script>
 
 <style scoped>
-.main {
-  margin: 20px;
-  background-color: #f0f0f0;
-  padding: 20px;
-  text-align: center;
-  border-radius: 10px;
-}
 
-.main-title {
-  color: #333;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.content {
+.coluna-cotainer {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
 }
-
 .coluna {
-  width: 30%;
+  flex: 0 1 30%; 
+  width: 33%;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -186,10 +177,11 @@ export default {
 
 .button-container {
   margin-top: 10px;
+  display: flex;
 }
 
 input {
-  width: 90%;
+  width: calc(100% - 20px);
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
