@@ -1,100 +1,49 @@
-<script>
-import axios from 'axios';
+<script setup>
+import { reactive, ref, onMounted } from 'vue';
+import api from "@/plugins/axios";
 
-export default {
-  props: ['pacotes'],
-  data() {
-    return {
-      newPacoteNome: '',
-      newPacoteDescricao: '',
-      newPacoteImagem: null,
-      newPacoteImagemNome: '',
-    };
-  },
-  computed: {
-    isValidPacoteInput() {
-      return (
-        this.newPacoteNome.trim() !== '' &&
-        this.newPacoteDescricao.trim() !== '' &&
-        this.newPacoteImagem !== null
-      );
-    },
-  },
-  methods: {
-    async addPacote() {
-      if (this.isValidPacoteInput) {
-        const formData = new FormData();
-        formData.append('nome', this.newPacoteNome);
-        formData.append('descricao', this.newPacoteDescricao);
-        formData.append('imagem', this.newPacoteImagem);
+const Pacotes = reactive({
+  nome: '',
+  descricao: '',
+  imagem: ''
+});
 
-        try {
-          const response = await axios.post('http://localhost:19003/api/pacotes/', formData);
-          this.$emit('adicionarPacote', response.data);
-          this.limparCampos();
-        } catch (error) {
-          console.error('Erro ao adicionar pacote:', error);
-        }
-      } else {
-        alert('Por favor, preencha todos os campos do pacote.');
-      }
-    },
-    excluirPacote(index) {
-      this.$emit('excluirPacote', index);
-    },
-    limparPacotes() {
-      if (window.confirm('Tem certeza de que deseja limpar todos os pacotes?')) {
-        this.$emit('limparPacotes');
-      }
-    },
-    handlePacoteImagemChange(event) {
-      const file = event.target.files[0];
-      this.newPacoteImagem = file;
-      this.newPacoteImagemNome = file.name;
-    },
-    limparCampos() {
-      this.newPacoteNome = '';
-      this.newPacoteDescricao = '';
-      this.newPacoteImagem = null;
-      this.newPacoteImagemNome = '';
-    },
-  },
+const adicionarPacotes = async () => {
+  try {
+    const response = await api.post('/pacotes/', Pacotes);
+    console.log('Resposta do servidor:', response.data);
+  }catch(error) {
+    console.error('Erro ao adicionar horario:', error);
+  }
 };
+
+const pacote = ref([]);
+
+onMounted(async () =>{
+  const response = await api.get('/pacotes/');
+  pacote.value = response.data.results;
+})
 </script>
 
 <template>
   <div class="coluna">
-    <h3>Pacotes</h3>
-    <div class="content-list">
-      <div class="list" v-for="(pacote, index) in pacotes" :key="index">
-        <span class="item">{{ pacote.nome }}</span>
-        <span class="item">{{ pacote.descricao }}</span>
-        <span class="item">{{ pacote.imagemNome }}</span>
-        <button @click="excluirPacote(index)" class="delete-button">Excluir</button>
-      </div>
-    </div>
+    <label for="procedimentoNome">Pacotes:</label>
+    <input v-model="Pacotes.nome" class="nome-data" >
 
-    <div>
-      <label for="pacoteNome">Nome do Pacote:</label>
-      <input v-model="newPacoteNome" type="text" id="pacoteNome" />
-    </div>
-    <div>
-      <label for="pacoteDescricao">Descrição do Pacote:</label>
-      <input v-model="newPacoteDescricao" type="text" id="pacoteDescricao" />
-    </div>
-    <div>
-      <label for="pacoteImagem">Imagem do Pacote:</label>
-      <input type="file" @change="handlePacoteImagemChange" />
-    </div>
+    <label for="procedimentoNome">Descrição do Pacote:</label>
+    <input v-model="Pacotes.descricao" class="nome-horaInicio"  >
 
-    <div class="button-container">
-      <button @click="addPacote" class="add-button" :disabled="!isValidPacoteInput">
-        Adicionar
-      </button>
-      <button @click="limparPacotes" class="clear-button">Limpar</button>
-    </div>
+    <label for="procedimentoNome">Imagem:</label>
+    <input v-model="Pacotes.imagem" class="nome-horaFim">
+  
+  <div class="button-container">
+  <div class="botão">
+    <button class="adicionar" @click="adicionarPacotes">Adicionar</button>
+  </div>
+  </div>
   </div>
 </template>
+
 
 <style scoped>
 
@@ -102,8 +51,9 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+
 .coluna {
-  flex: 0 1 30%; 
+  flex: 0 1 30%;
   width: 33%;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -126,12 +76,12 @@ export default {
 }
 
 .item {
-  color: #333;
+  color: #ffffff;
   font-size: 16px;
 }
 
-.delete-button {
-  background-color: #a70b00;
+.adicionar {
+  background-color: #35a700;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -140,8 +90,8 @@ export default {
   transition: background-color 0.3s;
 }
 
-.delete-button:hover {
-  background-color: #ff1100;
+.adicionar:hover {
+  background-color: #51ff00;
 }
 
 .clear-button {
@@ -157,22 +107,6 @@ export default {
 
 .clear-button:hover {
   background-color: #858484;
-}
-
-.add-button {
-  background-color: #333;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-right: 10px;
-}
-
-.add-button:hover {
-  background-color: #525252;
 }
 
 .button-container {
