@@ -1,37 +1,3 @@
-<template>
-  <div class="coluna">
-    <h3>Procedimentos</h3>
-    <div class="content-list">
-      <div class="list" v-for="(procedimento, index) in procedimentos" :key="index">
-        <span class="item">{{ procedimento.nome }}</span>
-        <span class="item">{{ procedimento.descricao }}</span>
-        <span class="item">{{ procedimento.imagemNome }}</span>
-        <button @click="excluirProcedimento(index)" class="delete-button">Excluir</button>
-      </div>
-    </div>
-
-    <div>
-      <label for="procedimentoNome">Nome do Procedimento:</label>
-      <input v-model="newProcedimentoNome" type="text" id="procedimentoNome" />
-    </div>
-    <div>
-      <label for="procedimentoDescricao">Descrição do Procedimento:</label>
-      <input v-model="newProcedimentoDescricao" type="text" id="procedimentoDescricao" />
-    </div>
-    <div>
-      <label for="procedimentoImagem">Imagem do Procedimento:</label>
-      <input type="file" @change="handleProcedimentoImagemChange" />
-    </div>
-
-    <div class="button-container">
-      <button @click="addProcedimento" class="add-button" :disabled="!isValidProcedimentoInput">
-        Adicionar
-      </button>
-      <button @click="limparProcedimentos" class="clear-button">Limpar</button>
-    </div>
-  </div>
-</template>
-
 <script>
 import axios from 'axios';
 
@@ -95,6 +61,41 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="coluna">
+    <h3>Procedimentos</h3>
+    <div class="content-list">
+      <div class="list" v-for="(procedimento, index) in procedimentos" :key="index">
+        <span class="item">{{ procedimento.nome }}</span>
+        <span class="item">{{ procedimento.descricao }}</span>
+        <span class="item">{{ procedimento.imagemNome }}</span>
+        <button @click="excluirProcedimento(index)" class="delete-button">Excluir</button>
+      </div>
+    </div>
+
+    <div>
+      <label for="procedimentoNome">Nome do Procedimento:</label>
+      <input v-model="newProcedimentoNome" type="text" id="procedimentoNome" />
+    </div>
+    <div>
+      <label for="procedimentoDescricao">Descrição do Procedimento:</label>
+      <input v-model="newProcedimentoDescricao" type="text" id="procedimentoDescricao" />
+    </div>
+    <div>
+      <label for="procedimentoImagem">Imagem do Procedimento:</label>
+      <input type="file" @change="handleProcedimentoImagemChange" />
+    </div>
+
+    <div class="button-container">
+      <button @click="addProcedimento" class="add-button" :disabled="!isValidProcedimentoInput">
+        Adicionar
+      </button>
+      <button @click="limparProcedimentos" class="clear-button">Limpar</button>
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 

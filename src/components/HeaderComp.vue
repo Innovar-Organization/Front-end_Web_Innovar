@@ -3,9 +3,9 @@
     <h2 class="header-text">Espaço Innovar</h2>
       <!-- <img class="logo" src="media/logoinnovar.png" alt="Innovar"> -->
     <div class="header-buttons">
-      <button class="header-button" @click="goToProcedimentos">Procedimentos</button>
-      <button class="header-button" @click="goToHorariosBloqueados">Horários Bloqueados</button>
-      <button class="header-button" @click="goToPacotes">Pacotes</button>
+      <router-link to="/horario"><button class="header-button">Horarios Bloqueados</button></router-link>
+      <router-link to="/procedimento"><button class="header-button">Procedimentos</button></router-link>
+      <router-link to="/pacote"><button class="header-button">Pacotes</button></router-link>
     </div>
   </div>
 </template>

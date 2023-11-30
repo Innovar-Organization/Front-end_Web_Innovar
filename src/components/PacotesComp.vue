@@ -1,37 +1,3 @@
-<template>
-  <div class="coluna">
-    <h3>Pacotes</h3>
-    <div class="content-list">
-      <div class="list" v-for="(pacote, index) in pacotes" :key="index">
-        <span class="item">{{ pacote.nome }}</span>
-        <span class="item">{{ pacote.descricao }}</span>
-        <span class="item">{{ pacote.imagemNome }}</span>
-        <button @click="excluirPacote(index)" class="delete-button">Excluir</button>
-      </div>
-    </div>
-
-    <div>
-      <label for="pacoteNome">Nome do Pacote:</label>
-      <input v-model="newPacoteNome" type="text" id="pacoteNome" />
-    </div>
-    <div>
-      <label for="pacoteDescricao">Descrição do Pacote:</label>
-      <input v-model="newPacoteDescricao" type="text" id="pacoteDescricao" />
-    </div>
-    <div>
-      <label for="pacoteImagem">Imagem do Pacote:</label>
-      <input type="file" @change="handlePacoteImagemChange" />
-    </div>
-
-    <div class="button-container">
-      <button @click="addPacote" class="add-button" :disabled="!isValidPacoteInput">
-        Adicionar
-      </button>
-      <button @click="limparPacotes" class="clear-button">Limpar</button>
-    </div>
-  </div>
-</template>
-
 <script>
 import axios from 'axios';
 
@@ -95,6 +61,40 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="coluna">
+    <h3>Pacotes</h3>
+    <div class="content-list">
+      <div class="list" v-for="(pacote, index) in pacotes" :key="index">
+        <span class="item">{{ pacote.nome }}</span>
+        <span class="item">{{ pacote.descricao }}</span>
+        <span class="item">{{ pacote.imagemNome }}</span>
+        <button @click="excluirPacote(index)" class="delete-button">Excluir</button>
+      </div>
+    </div>
+
+    <div>
+      <label for="pacoteNome">Nome do Pacote:</label>
+      <input v-model="newPacoteNome" type="text" id="pacoteNome" />
+    </div>
+    <div>
+      <label for="pacoteDescricao">Descrição do Pacote:</label>
+      <input v-model="newPacoteDescricao" type="text" id="pacoteDescricao" />
+    </div>
+    <div>
+      <label for="pacoteImagem">Imagem do Pacote:</label>
+      <input type="file" @change="handlePacoteImagemChange" />
+    </div>
+
+    <div class="button-container">
+      <button @click="addPacote" class="add-button" :disabled="!isValidPacoteInput">
+        Adicionar
+      </button>
+      <button @click="limparPacotes" class="clear-button">Limpar</button>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 

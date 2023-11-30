@@ -1,14 +1,10 @@
 <script setup>
-import HorariosBloqueados from '/src/components/HorariosBloqueados.vue'
-import PacotesComp from '/src/components/PacotesComp.vue'
-import ProcedimentosComp from '/src/components/ProcedimentosComp.vue'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
   <main>
-    <HorariosBloqueados />
-    <PacotesComp />
-    <ProcedimentosComp />
+    <RouterView />
   </main>
 </template>
 
