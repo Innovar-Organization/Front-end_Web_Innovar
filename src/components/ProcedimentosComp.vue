@@ -1,98 +1,46 @@
-<script>
-import axios from 'axios';
+<script setup>
+import { reactive, ref, onMounted } from 'vue';
+import api from "@/plugins/axios";
 
-export default {
-  props: ['procedimentos'],
-  data() {
-    return {
-      newProcedimentoNome: '',
-      newProcedimentoDescricao: '',
-      newProcedimentoImagem: null,
-      newProcedimentoImagemNome: '',
-    };
-  },
-  computed: {
-    isValidProcedimentoInput() {
-      return (
-        this.newProcedimentoNome.trim() !== '' &&
-        this.newProcedimentoDescricao.trim() !== '' &&
-        this.newProcedimentoImagem !== null
-      );
-    },
-  },
-  methods: {
-    async addProcedimento() {
-      if (this.isValidProcedimentoInput) {
-        const formData = new FormData();
-        formData.append('nome', this.newProcedimentoNome);
-        formData.append('descricao', this.newProcedimentoDescricao);
-        formData.append('imagem', this.newProcedimentoImagem);
+const Procedimentos = reactive({
+  nome: '',
+  descricao: '',
+  imagem: ''
+});
 
-        try {
-          const response = await axios.post('http://localhost:19003/api/procedimentos/', formData);
-          this.$emit('adicionarProcedimento', response.data);
-          this.limparCampos();
-        } catch (error) {
-          console.error('Erro ao adicionar procedimento:', error);
-        }
-      } else {
-        alert('Por favor, preencha todos os campos do procedimento.');
-      }
-    },
-    excluirProcedimento(index) {
-      this.$emit('excluirProcedimento', index);
-    },
-    limparProcedimentos() {
-      if (window.confirm('Tem certeza de que deseja limpar todos os procedimentos?')) {
-        this.$emit('limparProcedimentos');
-      }
-    },
-    handleProcedimentoImagemChange(event) {
-      const file = event.target.files[0];
-      this.newProcedimentoImagem = file;
-      this.newProcedimentoImagemNome = file.name;
-    },
-    limparCampos() {
-      this.newProcedimentoNome = '';
-      this.newProcedimentoDescricao = '';
-      this.newProcedimentoImagem = null;
-      this.newProcedimentoImagemNome = '';
-    },
-  },
+const adicionarProcedimentos = async () => {
+  try {
+    const response = await api.post('/procedimentos/', Procedimentos);
+    console.log('Resposta do servidor:', response.data);
+  }catch(error) {
+    console.error('Erro ao adicionar horario:', error);
+  }
 };
+
+const procedimento = ref([]);
+
+onMounted(async () =>{
+  const response = await api.get('/procedimentos/');
+  procedimento.value = response.data.results;
+})
 </script>
 
 <template>
   <div class="coluna">
-    <h3>Procedimentos</h3>
-    <div class="content-list">
-      <div class="list" v-for="(procedimento, index) in procedimentos" :key="index">
-        <span class="item">{{ procedimento.nome }}</span>
-        <span class="item">{{ procedimento.descricao }}</span>
-        <span class="item">{{ procedimento.imagemNome }}</span>
-        <button @click="excluirProcedimento(index)" class="delete-button">Excluir</button>
-      </div>
-    </div>
+    <label for="procedimentoNome">Procedimentos:</label>
+    <input v-model="Procedimentos.nome" class="nome-data" >
 
-    <div>
-      <label for="procedimentoNome">Nome do Procedimento:</label>
-      <input v-model="newProcedimentoNome" type="text" id="procedimentoNome" />
-    </div>
-    <div>
-      <label for="procedimentoDescricao">Descrição do Procedimento:</label>
-      <input v-model="newProcedimentoDescricao" type="text" id="procedimentoDescricao" />
-    </div>
-    <div>
-      <label for="procedimentoImagem">Imagem do Procedimento:</label>
-      <input type="file" @change="handleProcedimentoImagemChange" />
-    </div>
+    <label for="procedimentoNome">Descrição do Procedimentos:</label>
+    <input v-model="Procedimentos.descricao" class="nome-horaInicio"  >
 
-    <div class="button-container">
-      <button @click="addProcedimento" class="add-button" :disabled="!isValidProcedimentoInput">
-        Adicionar
-      </button>
-      <button @click="limparProcedimentos" class="clear-button">Limpar</button>
-    </div>
+    <label for="procedimentoNome">Imagem:</label>
+    <input v-model="Procedimentos.imagem" class="nome-horaFim">
+  
+  <div class="button-container">
+  <div class="botão">
+    <button class="adicionar" @click="adicionarProcedimentos">Adicionar</button>
+  </div>
+  </div>
   </div>
 </template>
 
@@ -102,7 +50,6 @@ export default {
 .coluna-cotainer {
   display: flex;
   justify-content: space-between;
-
 }
 
 .coluna {
@@ -129,12 +76,12 @@ export default {
 }
 
 .item {
-  color: #333;
+  color: #ffffff;
   font-size: 16px;
 }
 
-.delete-button {
-  background-color: #a70b00;
+.adicionar {
+  background-color: #35a700;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -143,8 +90,8 @@ export default {
   transition: background-color 0.3s;
 }
 
-.delete-button:hover {
-  background-color: #ff1100;
+.adicionar:hover {
+  background-color: #51ff00;
 }
 
 .clear-button {
@@ -160,22 +107,6 @@ export default {
 
 .clear-button:hover {
   background-color: #858484;
-}
-
-.add-button {
-  background-color: #333;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-right: 10px;
-}
-
-.add-button:hover {
-  background-color: #525252;
 }
 
 .button-container {
