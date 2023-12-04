@@ -53,7 +53,7 @@ onMounted(async () =>{
   justify-content: center;
   align-items: center;
   height: 70vh;
-  width: 180vh;
+  width: 100%;
 }
 
 .coluna {

@@ -1,5 +1,4 @@
 <script setup>
-import HomeScreen from '../screens/HomeScreen.vue'
 import { RouterView } from 'vue-router';
 </script>
 
