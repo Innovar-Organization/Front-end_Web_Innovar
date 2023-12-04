@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HeaderComp from '../components/MainComp.vue'
 import HorarioScreen from '../screens/HorarioScreen.vue'
 import PacoteScreen from '../screens/PacoteScreen.vue'
 import ProcedimentoScreen from '../screens/ProcedimentoScreen.vue'
+import HomeScreen from '../screens/HomeScreen.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HeaderComp
+      component: HomeScreen
     },
     {
       path: '/horario',

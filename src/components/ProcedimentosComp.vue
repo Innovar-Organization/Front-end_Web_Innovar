@@ -13,7 +13,7 @@ const adicionarProcedimentos = async () => {
     const response = await api.post('/procedimentos/', Procedimentos);
     console.log('Resposta do servidor:', response.data);
   }catch(error) {
-    console.error('Erro ao adicionar horario:', error);
+    console.error('Erro ao adicionar procedimento:', error);
   }
 };
 
@@ -26,15 +26,16 @@ onMounted(async () =>{
 </script>
 
 <template>
+  <div class="container">
   <div class="coluna">
     <label for="procedimentoNome">Procedimentos:</label>
-    <input v-model="Procedimentos.nome" class="nome-data" >
+    <input v-model="Procedimentos.nome" class="nome-procedimento" >
 
     <label for="procedimentoNome">Descrição do Procedimentos:</label>
-    <input v-model="Procedimentos.descricao" class="nome-horaInicio"  >
+    <input v-model="Procedimentos.descricao" class="nome-descricao"  >
 
     <label for="procedimentoNome">Imagem:</label>
-    <input v-model="Procedimentos.imagem" class="nome-horaFim">
+    <input v-model="Procedimentos.imagem" class="nome-imagem">
   
   <div class="button-container">
   <div class="botão">
@@ -42,20 +43,23 @@ onMounted(async () =>{
   </div>
   </div>
   </div>
+  </div>
 </template>
 
 
 <style scoped>
-
-.coluna-cotainer {
+.container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 180vh;
 }
 
 .coluna {
   flex: 0 1 30%;
   width: 33%;
-  background-color: #fff;
+  background-color: #a0a0a0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 10px;
@@ -81,9 +85,9 @@ onMounted(async () =>{
 }
 
 .adicionar {
-  background-color: #35a700;
-  color: white;
-  border: none;
+  background-color: #00b5b2;
+  color: #fff;
+  border: #fcfcfc;
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
@@ -91,9 +95,8 @@ onMounted(async () =>{
 }
 
 .adicionar:hover {
-  background-color: #51ff00;
+  background-color: #018684;
 }
-
 .clear-button {
   background-color: #333;
   color: white;

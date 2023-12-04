@@ -13,7 +13,7 @@ const adicionarPacotes = async () => {
     const response = await api.post('/pacotes/', Pacotes);
     console.log('Resposta do servidor:', response.data);
   }catch(error) {
-    console.error('Erro ao adicionar horario:', error);
+    console.error('Erro ao adicionar pacote:', error);
   }
 };
 
@@ -26,15 +26,16 @@ onMounted(async () =>{
 </script>
 
 <template>
+  <div class="container">
   <div class="coluna">
-    <label for="procedimentoNome">Pacotes:</label>
-    <input v-model="Pacotes.nome" class="nome-data" >
+    <label for="pacoteNome">Pacotes:</label>
+    <input v-model="Pacotes.nome" class="nome-pacote" >
 
-    <label for="procedimentoNome">Descrição do Pacote:</label>
-    <input v-model="Pacotes.descricao" class="nome-horaInicio"  >
+    <label for="pacoteNome">Descrição do Pacote:</label>
+    <input v-model="Pacotes.descricao" class="nome-descricao"  >
 
-    <label for="procedimentoNome">Imagem:</label>
-    <input v-model="Pacotes.imagem" class="nome-horaFim">
+    <label for="pacoteNome">Imagem:</label>
+    <input v-model="Pacotes.imagem" class="nome-imagem">
   
   <div class="button-container">
   <div class="botão">
@@ -42,6 +43,7 @@ onMounted(async () =>{
   </div>
   </div>
   </div>
+</div>
 </template>
 
 
@@ -52,10 +54,18 @@ onMounted(async () =>{
   justify-content: space-between;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 180vh;
+}
+
 .coluna {
   flex: 0 1 30%;
   width: 33%;
-  background-color: #fff;
+  background-color: #a0a0a0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 10px;
@@ -81,8 +91,8 @@ onMounted(async () =>{
 }
 
 .adicionar {
-  background-color: #35a700;
-  color: white;
+  background-color: #00b5b2;
+  color: #fff;
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
@@ -91,7 +101,7 @@ onMounted(async () =>{
 }
 
 .adicionar:hover {
-  background-color: #51ff00;
+  background-color: #018684;
 }
 
 .clear-button {
