@@ -16,7 +16,7 @@ const Pacotes = reactive({
 
 const adicionarPacotes = async () => {
   try {
-    const response = await api.post('/pacotes/', Pacotes);
+    const response = await api.post('pacotes/', Pacotes);
     const image = await imageService.uploadImage(file.value)
     Pacotes.cover_attachment_key = image.attachment_key
     await pacoteService.savePacote(Pacotes)
@@ -41,7 +41,7 @@ function onFileChange(e) {
 const pacote = ref([]);
 
 onMounted(async () =>{
-  const response = await api.get('/pacotes/');
+  const response = await api.get('pacotes/');
   pacote.value = response.data.results;
 })
 
