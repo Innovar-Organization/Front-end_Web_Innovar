@@ -59,6 +59,7 @@ const showForm = ref(false)
     <form class="form">
         <div class="row">
           <div id="preview">
+            <label for="procedimentoNome">Adicione Imagem:</label>
             <input type="file" @change="onFileChange" />
             <div class="cover">
               <img v-if="coverUrl" :src="coverUrl" />
@@ -116,6 +117,15 @@ const showForm = ref(false)
   color: #ffffff;
   font-size: 16px;
 }
+.cover img {
+  max-width: 100%; 
+  max-height: 100%; 
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto; 
+}
+
 
 .adicionar {
   background-color: #00b5b2;

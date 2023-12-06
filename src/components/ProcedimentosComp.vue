@@ -1,28 +1,51 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
 import api from "@/plugins/axios";
+import procedimentoService from '@/services/Procedimento.js'
+import imageService from '@/services/images.js'
 
+
+const coverUrl = ref('')
+const file = ref(null)
 const Procedimentos = reactive({
   nome: '',
   descricao: '',
   imagem: ''
 });
 
-const adicionarProcedimentos = async () => {
+
+const adicionarProcedimento = async () => {
   try {
-    const response = await api.post('/procedimentos/', Procedimentos);
+    const response = await api.post('procedimentos/', Procedimentos);
+    const image = await imageService.uploadImage(file.value)
+    Procedimentos.cover_attachment_key = image.attachment_key
+    await procedimentoService.saveProcedimentos(Procedimentos)
+    Object.assign(Procedimentos, {
+      id: '',
+      nome: '',
+      descricao: '',
+      imagem: ''
+    })
+  showForm.value = false
     console.log('Resposta do servidor:', response.data);
   }catch(error) {
-    console.error('Erro ao adicionar procedimento:', error);
+    console.error('Erro ao adicionar procedimentos:', error);
   }
 };
+
+function onFileChange(e) {
+  file.value = e.target.files[0]
+  coverUrl.value = URL.createObjectURL(file.value)
+}
 
 const procedimento = ref([]);
 
 onMounted(async () =>{
-  const response = await api.get('/procedimentos/');
+  const response = await api.get('procedimentos/');
   procedimento.value = response.data.results;
 })
+
+const showForm = ref(false)
 </script>
 
 <template>
@@ -33,21 +56,31 @@ onMounted(async () =>{
 
     <label for="procedimentoNome">Descrição do Procedimentos:</label>
     <input v-model="Procedimentos.descricao" class="nome-descricao"  >
-
-    <label for="procedimentoNome">Imagem:</label>
-    <input v-model="Procedimentos.imagem" class="nome-imagem">
-  
+    <form class="form">
+        <div class="row">
+          <div id="preview">
+            <label for="procedimentoNome">Adicione Imagem:</label>
+            <input type="file" @change="onFileChange" />
+            <div class="cover">
+              <img v-if="coverUrl" :src="coverUrl" />
+            </div>
+          </div>
+        </div>
+      </form>
   <div class="button-container">
   <div class="botão">
-    <button class="adicionar" @click="adicionarProcedimentos">Adicionar</button>
+    <button class="adicionar" @click="adicionarProcedimento">Adicionar</button>
   </div>
   </div>
   </div>
-  </div>
+</div>
 </template>
-
-
 <style scoped>
+
+.coluna-cotainer {
+  display: flex;
+  justify-content: space-between;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -87,7 +120,7 @@ onMounted(async () =>{
 .adicionar {
   background-color: #00b5b2;
   color: #fff;
-  border: #fcfcfc;
+  border: none;
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
@@ -97,6 +130,15 @@ onMounted(async () =>{
 .adicionar:hover {
   background-color: #018684;
 }
+.cover img {
+  max-width: 100%; 
+  max-height: 100%; 
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto; 
+}
+
 .clear-button {
   background-color: #333;
   color: white;
@@ -111,6 +153,7 @@ onMounted(async () =>{
 .clear-button:hover {
   background-color: #858484;
 }
+
 
 .button-container {
   margin-top: 10px;
