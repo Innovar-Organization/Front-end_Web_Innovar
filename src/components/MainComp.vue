@@ -4,14 +4,15 @@ import { RouterView } from 'vue-router';
 
 <template>
   <main>
+    
     <RouterView />
-  </main>
+    </main>
 </template>
 
 <style>
 
 body {
-  background-color: #6f7070;
+  background-color: #fcfcfc;
 }
 
 main {

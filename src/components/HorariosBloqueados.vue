@@ -26,6 +26,7 @@ onMounted(async () =>{
 </script>
 
 <template>
+  <div class="container">
   <div class="coluna">
     <label for="procedimentoNome">Data:</label>
     <input v-model="horarios.data" class="nome-data" placeholder="data" type="date">
@@ -49,6 +50,7 @@ onMounted(async () =>{
           <h3 class="item">{{ horario.hora_fim }}</h3>
         </div>
   </div>
+</div>
 </template>
 
 
@@ -59,10 +61,18 @@ onMounted(async () =>{
   justify-content: space-between;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 100%;
+}
+
 .coluna {
   flex: 0 1 30%;
   width: 33%;
-  background-color: #fff;
+  background-color: #a0a0a0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 10px;
@@ -88,8 +98,8 @@ onMounted(async () =>{
 }
 
 .adicionar {
-  background-color: #35a700;
-  color: white;
+  background-color: #00b5b2;
+  color: #fff;
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
@@ -98,7 +108,7 @@ onMounted(async () =>{
 }
 
 .adicionar:hover {
-  background-color: #51ff00;
+  background-color: #018684;
 }
 
 .clear-button {
