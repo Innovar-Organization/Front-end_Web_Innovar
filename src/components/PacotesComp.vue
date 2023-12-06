@@ -1,28 +1,51 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
 import api from "@/plugins/axios";
+import pacoteService from '@/services/pacote.js'
+import imageService from '@/services/images.js'
 
+
+const coverUrl = ref('')
+const file = ref(null)
 const Pacotes = reactive({
   nome: '',
   descricao: '',
   imagem: ''
 });
 
+
 const adicionarPacotes = async () => {
   try {
-    const response = await api.post('/pacotes/', Pacotes);
+    const response = await api.post('pacotes/', Pacotes);
+    const image = await imageService.uploadImage(file.value)
+    Pacotes.cover_attachment_key = image.attachment_key
+    await pacoteService.savePacote(Pacotes)
+    Object.assign(Pacotes, {
+      id: '',
+      nome: '',
+      descricao: '',
+      imagem: ''
+    })
+  showForm.value = false
     console.log('Resposta do servidor:', response.data);
   }catch(error) {
     console.error('Erro ao adicionar pacote:', error);
   }
 };
 
+function onFileChange(e) {
+  file.value = e.target.files[0]
+  coverUrl.value = URL.createObjectURL(file.value)
+}
+
 const pacote = ref([]);
 
 onMounted(async () =>{
-  const response = await api.get('/pacotes/');
+  const response = await api.get('pacotes/');
   pacote.value = response.data.results;
 })
+
+const showForm = ref(false)
 </script>
 
 <template>
@@ -33,10 +56,16 @@ onMounted(async () =>{
 
     <label for="pacoteNome">Descrição do Pacote:</label>
     <input v-model="Pacotes.descricao" class="nome-descricao"  >
-
-    <label for="pacoteNome">Imagem:</label>
-    <input v-model="Pacotes.imagem" class="nome-imagem">
-  
+    <form class="form">
+        <div class="row">
+          <div id="preview">
+            <input type="file" @change="onFileChange" />
+            <div class="cover">
+              <img v-if="coverUrl" :src="coverUrl" />
+            </div>
+          </div>
+        </div>
+      </form>
   <div class="button-container">
   <div class="botão">
     <button class="adicionar" @click="adicionarPacotes">Adicionar</button>
@@ -45,8 +74,6 @@ onMounted(async () =>{
   </div>
 </div>
 </template>
-
-
 <style scoped>
 
 .coluna-cotainer {

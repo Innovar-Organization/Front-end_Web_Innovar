@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://0.0.0.0:19003/api/'
+  baseURL: 'https://backendinnovar-dev-sbpq.3.us-1.fl0.io/api/'
 })
 
 
